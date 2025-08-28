@@ -8,8 +8,17 @@ Simple Java 21 Hello World application with Maven build.
 
 ## Build Commands
 
+**IMPORTANT**: This is a polyglot repository. Use `just` commands exclusively - never run underlying tools (mvn, gradle, npm, etc.) directly.
+
 ```bash
-mvn clean test
+# Recommended - filters Maven output to save tokens
+just quick-test
+
+# Full Maven output
+just test
+
+# See all available commands
+just
 ```
 
 ## You Can Crash At Any Time
