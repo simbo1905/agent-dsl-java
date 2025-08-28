@@ -59,3 +59,14 @@ jobs:
           Expand-Archive -Path "mvnd.zip" -DestinationPath "$env:USERPROFILE\.m2"
           echo "$env:USERPROFILE\.m2\maven-mvnd-1.0.2-windows-amd64\bin" | Out-File -FilePath $env:GITHUB_PATH -Append
         }
+
+    - name: Build with mvnd
+      run: |
+        if command -v mvnd &> /dev/null 2>&1 || Get-Command mvnd -ErrorAction SilentlyContinue; then
+          echo "Building with mvnd..."
+          mvnd clean compile
+        else
+          echo "Falling back to mvn..."
+          mvn clean compile
+        fi
+      shell: ${{ runner.os == 'Windows' && 'pwsh' || 'bash' }}
