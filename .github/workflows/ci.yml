@@ -32,55 +32,17 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-maven-
 
-    - name: Cache mvnd
-      uses: actions/cache@v4
-      with:
-        path: ~/.m2/mvnd
-        key: ${{ runner.os }}-mvnd-${{ matrix.java }}
-        restore-keys: |
-          ${{ runner.os }}-mvnd-
+    - name: Install just
+      uses: extractions/setup-just@v2
 
-    - name: Install mvnd (Unix-like)
-      if: runner.os != 'Windows'
-      run: |
-        if ! command -v mvnd &> /dev/null; then
-          echo "Installing mvnd..."
-          curl -fsSL https://github.com/apache/maven-mvnd/releases/download/1.0.2/maven-mvnd-1.0.2-${{ runner.os == 'macOS' && 'darwin-amd64' || 'linux-amd64' }}.tar.gz | tar xz -C ~/.m2
-          echo "$HOME/.m2/maven-mvnd-1.0.2-${{ runner.os == 'macOS' && 'darwin-amd64' || 'linux-amd64' }}/bin" >> $GITHUB_PATH
-        fi
+    - name: Setup project
+      run: just setup
 
-    - name: Install mvnd (Windows)
-      if: runner.os == 'Windows'
-      shell: pwsh
-      run: |
-        if (-not (Get-Command mvnd -ErrorAction SilentlyContinue)) {
-          Write-Host "Installing mvnd..."
-          Invoke-WebRequest -Uri "https://github.com/apache/maven-mvnd/releases/download/1.0.2/maven-mvnd-1.0.2-windows-amd64.zip" -OutFile "mvnd.zip"
-          Expand-Archive -Path "mvnd.zip" -DestinationPath "$env:USERPROFILE\.m2"
-          echo "$env:USERPROFILE\.m2\maven-mvnd-1.0.2-windows-amd64\bin" | Out-File -FilePath $env:GITHUB_PATH -Append
-        }
+    - name: Build project
+      run: just build
 
-    - name: Build with mvnd
-      run: |
-        if command -v mvnd &> /dev/null 2>&1 || Get-Command mvnd -ErrorAction SilentlyContinue; then
-          echo "Building with mvnd..."
-          mvnd clean compile
-        else
-          echo "Falling back to mvn..."
-          mvn clean compile
-        fi
-      shell: ${{ runner.os == 'Windows' && 'pwsh' || 'bash' }}
-
-    - name: Run tests with mvnd
-      run: |
-        if command -v mvnd &> /dev/null 2>&1 || Get-Command mvnd -ErrorAction SilentlyContinue; then
-          echo "Testing with mvnd..."
-          mvnd test
-        else
-          echo "Falling back to mvn..."
-          mvn test
-        fi
-      shell: ${{ runner.os == 'Windows' && 'pwsh' || 'bash' }}
+    - name: Run tests
+      run: just quick-test
 
     - name: Generate test report
       uses: dorny/test-reporter@v1
