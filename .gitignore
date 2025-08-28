@@ -9,3 +9,8 @@ target/
 
 CLAUDE.md
 GEMINI.md
+
+# LaTeX intermediate files
+*.aux
+*.log
+*.out

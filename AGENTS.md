@@ -5,7 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Critical Files for Planning Phase
 
 When starting any significant work or planning phase, you MUST read these files first:
-- **@justfile** - Single source of truth for all build operations (polyglot)
+- **@justfile** - run `just` to see the list of commands
 - **@README.md** - User-facing overview and quick start
 - **@AGENT_OS_MANIFESTO.md** - Core philosophy and principles
 - **@docs/agent-os-java.pdf** - Technical paper with detailed architecture
