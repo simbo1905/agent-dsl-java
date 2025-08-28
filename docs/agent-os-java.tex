@@ -1,0 +1,136 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage{amsmath}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage{graphicx}
+
+\title{AgentDSL: Compile-Time Validated Orchestration for LLM Agent Systems}
+\author{Simon Massey\thanks{Corresponding author: simbo1905@github.com}}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+We propose AgentDSL, a novel approach to LLM agent orchestration that leverages compile-time type validation to ensure structural correctness of agent workflows. By utilizing Java 25's reactive stream abstractions and dynamic compilation capabilities, AgentDSL enables LLMs to generate executable workflow specifications that are validated before execution. This approach addresses fundamental reliability challenges in current agent systems while maintaining the flexibility required for dynamic task decomposition.
+\end{abstract}
+
+\section{Introduction}
+
+Current LLM agent frameworks rely heavily on runtime validation and prompt engineering to coordinate complex workflows. This approach leads to several challenges: late discovery of structural errors, context pollution from unnecessary tool loading, and difficulty in expressing complex execution patterns. AgentDSL addresses these limitations by introducing a compile-time validated domain-specific language for agent orchestration.
+
+\section{Motivation}
+
+\subsection{Limitations of Current Approaches}
+
+Contemporary agent systems typically implement orchestration through:
+\begin{itemize}
+    \item Template-based prompt construction with runtime tool discovery
+    \item Linear conversation histories that inadequately represent parallel execution
+    \item Global tool contexts that introduce unnecessary complexity
+    \item Runtime validation that discovers structural errors only during execution
+\end{itemize}
+
+\subsection{The Promise of Type-Safe Orchestration}
+
+Type systems have long provided guarantees about program structure. By applying these principles to agent orchestration, we can:
+\begin{itemize}
+    \item Detect invalid tool invocations before execution
+    \item Express complex workflow patterns explicitly
+    \item Minimize context size through selective tool loading
+    \item Enable LLMs to reason about workflow structure programmatically
+\end{itemize}
+
+\section{Design Principles}
+
+\subsection{Compile-Time Validation}
+AgentDSL leverages the Java compiler to validate workflow structure. If generated code compiles successfully, the workflow is guaranteed to reference only valid tools with correct parameter types.
+
+\subsection{Reactive Stream Abstraction}
+Using Project Loom-compatible reactive streams (Eclipse Mutiny, Spring WebFlux), AgentDSL represents workflows as composable asynchronous operations with built-in retry, timeout, and error handling semantics.
+
+\subsection{Dynamic Compilation}
+Java 25's enhanced compilation APIs enable runtime generation and validation of workflow specifications without filesystem operations, supporting ephemeral, task-specific orchestrations.
+
+\subsection{Immutable Event DAG}
+Rather than linear conversation histories, AgentDSL models interactions as directed acyclic graphs of immutable events, enabling parallel execution branches and selective history pruning.
+
+\section{Architecture}
+
+\subsection{Core Components}
+
+\begin{lstlisting}[language=Java, caption=Core Type Definitions]
+sealed interface AgentOp<T> permits 
+    Execute<T>, Fork<T>, Validate<T>, Checkpoint<T> {}
+
+interface ToolRegistry {
+    @CompileTime
+    Uni<T> invokeTool(String name, JsonNode params);
+}
+
+class WorkflowCompiler {
+    Class<?> compile(String sourceCode) 
+        throws CompilationException;
+}
+\end{lstlisting}
+
+\subsection{Workflow Generation Process}
+
+\begin{enumerate}
+    \item LLM generates Java source code representing workflow
+    \item WorkflowCompiler validates and compiles specification
+    \item Successful compilation guarantees structural validity
+    \item Runtime executes validated workflow with reactive stream semantics
+\end{enumerate}
+
+\section{Implementation Strategy}
+
+\subsection{Phase 1: Core Infrastructure}
+Development of compilation framework, type-safe tool registry, and basic reactive stream operators.
+
+\subsection{Phase 2: LLM Integration}
+Training data generation for workflow specification, prompt engineering for reliable code generation, and error message interpretation.
+
+\subsection{Phase 3: Runtime Optimization}
+Context caching strategies, parallel execution optimization, and checkpoint/recovery mechanisms.
+
+\section{Evaluation Metrics}
+
+\subsection{Reliability}
+\begin{itemize}
+    \item Reduction in runtime failures due to structural errors
+    \item Time to error discovery (compile-time vs runtime)
+    \item Recovery success rate from transient failures
+\end{itemize}
+
+\subsection{Efficiency}
+\begin{itemize}
+    \item Token usage reduction through selective context loading
+    \item Parallel execution speedup for independent tasks
+    \item Context cache hit rates
+\end{itemize}
+
+\subsection{Expressiveness}
+\begin{itemize}
+    \item Complexity of workflows expressible in DSL
+    \item LLM success rate in generating valid specifications
+    \item Developer productivity metrics
+\end{itemize}
+
+\section{Related Work}
+
+While several projects explore agent orchestration (LangGraph, AutoGen, CrewAI), none leverage compile-time validation for structural correctness. The closest analogues exist in distributed systems (Apache Beam, Flink) and reactive programming frameworks, which inspire our approach but target different problem domains.
+
+\section{Conclusion}
+
+AgentDSL represents a paradigm shift in LLM agent orchestration, moving from runtime discovery to compile-time validation. By enabling LLMs to generate type-safe workflow specifications, we achieve both reliability and flexibility in agent system design. Initial prototypes demonstrate feasibility, and we seek collaboration to develop this approach into production-ready tooling.
+
+\section{Acknowledgments}
+
+This work builds upon insights from the reactive programming community and benefits from discussions within the OpenHands and Aider.chat communities.
+
+\bibliographystyle{plain}
+\bibliography{references}
+
+\end{document}
