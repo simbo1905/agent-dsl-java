@@ -48,3 +48,14 @@ jobs:
           curl -fsSL https://github.com/apache/maven-mvnd/releases/download/1.0.2/maven-mvnd-1.0.2-${{ runner.os == 'macOS' && 'darwin-amd64' || 'linux-amd64' }}.tar.gz | tar xz -C ~/.m2
           echo "$HOME/.m2/maven-mvnd-1.0.2-${{ runner.os == 'macOS' && 'darwin-amd64' || 'linux-amd64' }}/bin" >> $GITHUB_PATH
         fi
+
+    - name: Install mvnd (Windows)
+      if: runner.os == 'Windows'
+      shell: pwsh
+      run: |
+        if (-not (Get-Command mvnd -ErrorAction SilentlyContinue)) {
+          Write-Host "Installing mvnd..."
+          Invoke-WebRequest -Uri "https://github.com/apache/maven-mvnd/releases/download/1.0.2/maven-mvnd-1.0.2-windows-amd64.zip" -OutFile "mvnd.zip"
+          Expand-Archive -Path "mvnd.zip" -DestinationPath "$env:USERPROFILE\.m2"
+          echo "$env:USERPROFILE\.m2\maven-mvnd-1.0.2-windows-amd64\bin" | Out-File -FilePath $env:GITHUB_PATH -Append
+        }
