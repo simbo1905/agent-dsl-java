@@ -70,3 +70,14 @@ jobs:
           mvn clean compile
         fi
       shell: ${{ runner.os == 'Windows' && 'pwsh' || 'bash' }}
+
+    - name: Run tests with mvnd
+      run: |
+        if command -v mvnd &> /dev/null 2>&1 || Get-Command mvnd -ErrorAction SilentlyContinue; then
+          echo "Testing with mvnd..."
+          mvnd test
+        else
+          echo "Falling back to mvn..."
+          mvn test
+        fi
+      shell: ${{ runner.os == 'Windows' && 'pwsh' || 'bash' }}
