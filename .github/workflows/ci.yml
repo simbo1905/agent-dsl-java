@@ -39,3 +39,12 @@ jobs:
         key: ${{ runner.os }}-mvnd-${{ matrix.java }}
         restore-keys: |
           ${{ runner.os }}-mvnd-
+
+    - name: Install mvnd (Unix-like)
+      if: runner.os != 'Windows'
+      run: |
+        if ! command -v mvnd &> /dev/null; then
+          echo "Installing mvnd..."
+          curl -fsSL https://github.com/apache/maven-mvnd/releases/download/1.0.2/maven-mvnd-1.0.2-${{ runner.os == 'macOS' && 'darwin-amd64' || 'linux-amd64' }}.tar.gz | tar xz -C ~/.m2
+          echo "$HOME/.m2/maven-mvnd-1.0.2-${{ runner.os == 'macOS' && 'darwin-amd64' || 'linux-amd64' }}/bin" >> $GITHUB_PATH
+        fi
