@@ -81,3 +81,11 @@ jobs:
           mvn test
         fi
       shell: ${{ runner.os == 'Windows' && 'pwsh' || 'bash' }}
+
+    - name: Generate test report
+      uses: dorny/test-reporter@v1
+      if: success() || failure()
+      with:
+        name: Test Results - ${{ matrix.os }} - Java ${{ matrix.java }}
+        path: target/surefire-reports/*.xml
+        reporter: java-junit
