@@ -31,3 +31,11 @@ jobs:
         key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
         restore-keys: |
           ${{ runner.os }}-maven-
+
+    - name: Cache mvnd
+      uses: actions/cache@v4
+      with:
+        path: ~/.m2/mvnd
+        key: ${{ runner.os }}-mvnd-${{ matrix.java }}
+        restore-keys: |
+          ${{ runner.os }}-mvnd-
