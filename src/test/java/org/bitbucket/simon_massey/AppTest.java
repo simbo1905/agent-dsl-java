@@ -1,16 +1,19 @@
 package org.bitbucket.simon_massey;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
 
 /// Unit test for simple App.
-public class AppTest 
-{
-    /// Rigorous Test :-)
+class AppTest {
+    
+    /// Test that demonstrates AssertJ usage
     @Test
-    public void shouldAnswerWithTrue()
-    {
-        assertTrue( true );
+    void shouldAnswerWithTrue() {
+        assertThat(true).isTrue();
+        assertThat("Hello World!").isNotBlank()
+            .startsWith("Hello")
+            .endsWith("World!")
+            .contains("World");
     }
 }
