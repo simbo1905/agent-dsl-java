@@ -30,12 +30,18 @@ setup:
     @mkdir -p .mvn
     @echo "✓ Created .mvn directory for Maven Daemon"
     
-    # Create AGENTS.md symlink to CLAUDE.md
-    @if [ ! -L "AGENTS.md" ]; then \
-        ln -s CLAUDE.md AGENTS.md && \
-        echo "✓ Created symlink: AGENTS.md -> CLAUDE.md"; \
+    # Create AGENTS.md symlinks for convenience
+    @if [ ! -L "CLAUDE.md" ]; then \
+        ln -s AGENTS.md CLAUDE.md && \
+        echo "✓ Created symlink: CLAUDE.md -> AGENTS.md"; \
     else \
-        echo "✓ Symlink already exists: AGENTS.md -> CLAUDE.md"; \
+        echo "✓ Symlink already exists: CLAUDE.md -> AGENTS.md"; \
+    fi
+    @if [ ! -L "GEMINI.md" ]; then \
+        ln -s AGENTS.md GEMINI.md && \
+        echo "✓ Created symlink: GEMINI.md -> AGENTS.md"; \
+    else \
+        echo "✓ Symlink already exists: GEMINI.md -> AGENTS.md"; \
     fi
     
     # Create polyglot directory structure
