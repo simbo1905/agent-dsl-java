@@ -1,14 +1,14 @@
-# CLAUDE.md
+# AGENTS.md CLAUDE.md GEMINI.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This symlinked file provides guidance to agentic coding tools when working with this repository.
 
 ## Critical Files for Planning Phase
 
 When starting any significant work or planning phase, you MUST read these files first:
-- **@justfile** - run `just` to see the list of commands
+- **@justfile** - run `just` to see the list of commands defined in that file
 - **@README.md** - User-facing overview and quick start
 - **@AGENT_OS_MANIFESTO.md** - Core philosophy and principles
-- **@docs/agent-os-java.pdf** - Technical paper with detailed architecture
+- **@docs/agent-os-java.pdf** - Technical paper
 
 For small bug fixes with clear issue descriptions, these files may be omitted from context to save tokens.
 
@@ -16,11 +16,13 @@ For small bug fixes with clear issue descriptions, these files may be omitted fr
 
 ## Project Overview
 
-**AgentDSL** - A compile-time validated orchestration framework for LLM agent systems using Java 25 and reactive streams.
+**AgentDSL Java** - A compile-time validated orchestration framework for LLM agent systems.
 
-**Current Status**: Conceptual design phase with LaTeX paper (`agent-os-java.tex`) outlining the architecture.
+**Current Status**: Conceptual design phase with LaTeX paper (`agent-os-java.tex`) outlining the approach.
 
 **Philosophy**: The compiler validates structure; you generate logic. Type safety prevents runtime failures.
+
+**Rust or Typescript or Others Welcome**: The approach here is genetic. Other languages can follow this approach.  
 
 ## Architecture Overview
 
