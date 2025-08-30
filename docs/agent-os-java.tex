@@ -27,9 +27,10 @@ Current LLM agent frameworks rely heavily on runtime validation and prompt engin
 Contemporary agent systems typically implement orchestration through:
 \begin{itemize}
     \item Template-based prompt construction with runtime tool discovery
-    \item Linear conversation histories that inadequately represent parallel execution
-    \item Global tool contexts that introduce unnecessary complexity
-    \item Runtime validation that discovers structural errors only during execution
+    \item Linear conversation histories with single-level sub-agents that inadequately represent parallel execution or linear handoffs
+    \item Global tool contexts that introduce necessary context dilution
+    \item Event-Driven process choreography unsuitable for managing non-deterministic agentic workflows
+    \item "One Size Fits All" approaches where customisation have developer add addtional prompt tokens to override hidden vendor system prompts tuned for benchmarks or the vendors own development teams
 \end{itemize}
 
 \subsection{The Promise of Type-Safe Orchestration}
